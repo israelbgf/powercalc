@@ -1,6 +1,14 @@
 import {shallowMount} from '@vue/test-utils'
 import PowerCalc from '@/components/PowerCalc.vue'
 
+describe('General Error Handling', () => {
+    it('0 when input is goofy', () => {
+        const wrapper = shallowMount(PowerCalc)
+        let result = wrapper.vm.calculateResourcePrice({currentPrice: -1, unitsLeftForThisPrice: -1, unitsToBuy: -1})
+        expect(result).toEqual(0)
+    })
+})
+
 describe('Pricing calculation for common resources.', () => {
     it('There are 3 common resources for 1$ and user wants to buy 1', () => {
         const wrapper = shallowMount(PowerCalc)
