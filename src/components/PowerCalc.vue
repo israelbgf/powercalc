@@ -8,15 +8,15 @@
         </section>
 
         <section>
-            <h1>Leilão (<span>{{currentMoney}}</span> => <span>{{balanceAfterBuyingPowerplant}}</span>)</h1>
+            <h1>Leilão: <span>{{currentMoney}}</span> => <span>{{balanceAfterBuyingPowerplant}}</span></h1>
             <div>
                 <input v-model.number="powerPlantPrice" type="text" placeholder="20+12" inputmode="numeric">
             </div>
         </section>
 
         <section>
-            <h1>Recursos (<span>{{balanceAfterBuyingPowerplant}}</span> =>
-                <span>{{balanceAfterBuyingResources}}</span>)</h1>
+            <h1>Recursos: <span>{{balanceAfterBuyingPowerplant}}</span> =>
+                <span>{{balanceAfterBuyingResources}}</span></h1>
             <div>
                 <table align="center">
                     <thead>
@@ -60,8 +60,8 @@
         </section>
 
         <section>
-            <h1>Rede Elétrica (<span>{{balanceAfterBuyingResources}}</span> =>
-                <span>{{balanceAfterExpandingPowerGrid}}</span>)</h1>
+            <h1>Rede Elétrica: <span>{{balanceAfterBuyingResources}}</span> =>
+                <span>{{balanceAfterExpandingPowerGrid}}</span></h1>
 
             <div>Cidade #1 <input v-model="city1PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
                     class="totalizador">{{ city1Price }}</span></div>
@@ -115,7 +115,13 @@
                     if (price.charAt(price.length - 1) === '+')
                         price = price.slice(0, price.length - 1)
 
-                    return eval(price)
+                    let specialSymbolsAreTreadedAsPlusSign = price
+                        .replace(',', '+')
+                        .replace('.', '+')
+                        .replace('-', '+')
+                        .replace(' ', '+');
+
+                    return eval(specialSymbolsAreTreadedAsPlusSign)
                 } catch (e) {
                     return 0
                 }
