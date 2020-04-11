@@ -3,19 +3,19 @@
         <section>
             <h1>Seu Dinheiro</h1>
             <div>
-                <input v-model="powerPlantPrice" type="text" placeholder="20+12" inputmode="numeric">
+                <input v-model="currentMoney" type="text" placeholder="20+12" inputmode="numeric">
             </div>
         </section>
 
         <section>
-            <h1>Leilão</h1>
+            <h1>Leilão (<span>{{currentMoney}}</span> => <span>{{balanceAfterBuyingPowerplant}}</span>)</h1>
             <div>
                 <input v-model="powerPlantPrice" type="text" placeholder="20+12" inputmode="numeric">
             </div>
         </section>
 
         <section>
-            <h1>Recursos</h1>
+            <h1>Recursos (<span>{{balanceAfterBuyingResources}}</span> => <span>{{currentMoney - powerPlantPrice}}</span>)</h1>
             <div>
                 <table align="center">
                     <thead>
@@ -58,7 +58,7 @@
         </section>
 
         <section>
-            <h1>Rede Elétrica</h1>
+            <h1>Rede Elétrica {{balanceAfterExpandingPowerGrid}}</h1>
             <div>Cidade #1 <input v-model="city1PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
                     class="totalizador">{{ city1Price }}</span></div>
             <div>Cidade #2 <input type="text" placeholder="20+12" inputmode="numeric"> <span
@@ -77,7 +77,40 @@
 <script>
     export default {
         name: 'PowerCalc',
+        methods: {
+            calculateResourcePrice({currentPrice, unitsLeftForThisPrice, unitsToBuy, resourceType = "common"}){
+                if(unitsToBuy <= unitsLeftForThisPrice){
+                    return unitsToBuy * currentPrice
+                }
+
+                let resourceMarket, startOfTheGroup, firstResource
+                if(resourceType === "common"){
+                    resourceMarket = [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8]
+                    startOfTheGroup = (currentPrice - 1) * 3
+                    firstResource = startOfTheGroup + (3 - unitsLeftForThisPrice);
+                }else{
+                    resourceMarket = [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16]
+                    startOfTheGroup = currentPrice <= 8 ? currentPrice - 1 : {
+                        10: 8,
+                        12: 9,
+                        14: 10,
+                        16: 11
+                    }[currentPrice]
+                    firstResource = startOfTheGroup;
+                }
+                return resourceMarket.slice(firstResource, firstResource + unitsToBuy).reduce((a, b) => a + b, 0)
+            }
+        },
         computed: {
+            balanceAfterBuyingPowerplant() {
+                return this.currentMoney - this.powerPlantPrice
+            },
+            balanceAfterBuyingResources() {
+                return this.balanceAfterBuyingPowerplant
+            },
+            balanceAfterExpandingPowerGrid() {
+                return 0
+            },
             city1Price() {
                 if(this.city1PriceInput === "")
                     return 0
@@ -94,6 +127,7 @@
         },
         data() {
             return {
+                currentMoney: 0,
                 powerPlantPrice: 0,
 
                 coalCurrentMarketPrice: 0,
