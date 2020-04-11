@@ -8,15 +8,22 @@
         </section>
 
         <section>
-            <h1>Leilão: <span>{{currentMoney}}</span> => <span>{{balanceAfterBuyingPowerplant}}</span></h1>
+            <h1>Leilão: <span>{{currentMoney}}</span> =>
+                <span v-bind:class="{ green: balanceAfterBuyingPowerplant >= 0, red: balanceAfterBuyingPowerplant < 0 }">
+                    {{balanceAfterBuyingPowerplant}}
+                </span>
+            </h1>
             <div>
                 <input v-model.number="powerPlantPrice" type="text" placeholder="20+12" inputmode="numeric">
             </div>
         </section>
 
         <section>
-            <h1>Recursos: <span>{{balanceAfterBuyingPowerplant}}</span> =>
-                <span>{{balanceAfterBuyingResources}}</span></h1>
+            <h1>Recursos:<span>{{balanceAfterBuyingPowerplant}}</span> =>
+                <span v-bind:class="{ green: balanceAfterBuyingResources >= 0, red: balanceAfterBuyingResources < 0 }">
+                    {{balanceAfterBuyingResources}}
+                </span>
+            </h1>
             <div>
                 <table align="center">
                     <thead>
@@ -24,7 +31,7 @@
                     <td>Preço</td>
                     <td>Restante</td>
                     <td>Desejado</td>
-                    <td>Total</td>
+                    <td></td>
                     </thead>
                     <tr>
                         <td>Carvão</td>
@@ -61,7 +68,10 @@
 
         <section>
             <h1>Rede Elétrica: <span>{{balanceAfterBuyingResources}}</span> =>
-                <span>{{balanceAfterExpandingPowerGrid}}</span></h1>
+                <span v-bind:class="{ green: balanceAfterExpandingPowerGrid >= 0, red: balanceAfterExpandingPowerGrid < 0 }">
+                    {{balanceAfterExpandingPowerGrid}}
+                </span>
+            </h1>
 
             <div>Cidade #1 <input v-model="city1PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
                     class="totalizador">{{ city1Price }}</span></div>
@@ -246,5 +256,17 @@
 
     .totalizador {
         font-weight: bold;
+    }
+
+    .green {
+        color: green;
+    }
+
+    .red {
+        color: orangered;
+    }
+
+    .red::after{
+        content: "!"
     }
 </style>
