@@ -25,7 +25,7 @@
                 </span>
             </h1>
             <div>
-                <table align="center">
+                <table class="resources-table" align="center">
                     <thead>
                     <td></td>
                     <td>Preço</td>
@@ -73,16 +73,20 @@
                 </span>
             </h1>
 
-            <div>Cidade #1 <input v-model="city1PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
+            <div class="city-input">Cidade #1 <input v-model="city1PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
                     class="totalizador">{{ city1Price }}</span></div>
-            <div>Cidade #2 <input v-model="city2PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
+            <div class="city-input">Cidade #2 <input v-model="city2PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
                     class="totalizador">{{ city2Price }}</span></div>
-            <div>Cidade #3 <input v-model="city3PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
+            <div class="city-input">Cidade #3 <input v-model="city3PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
                     class="totalizador">{{ city3Price }}</span></div>
-            <div>Cidade #4 <input v-model="city4PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
+            <div class="city-input">Cidade #4 <input v-model="city4PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
                     class="totalizador">{{ city4Price }}</span></div>
-            <div>Cidade #5 <input v-model="city5PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
+            <div class="city-input">Cidade #5 <input v-model="city5PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
                     class="totalizador">{{ city5Price }}</span></div>
+        </section>
+
+        <section>
+            <button style="margin-top: 20px">Reset</button>
         </section>
 
     </div>
@@ -255,6 +259,7 @@
     }
 
     .totalizador {
+        margin: 0 10px 0 10px;
         font-weight: bold;
     }
 
@@ -268,5 +273,22 @@
 
     .red::after{
         content: "!"
+    }
+
+    table {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    table tr {
+        border: 1px solid black;
+    }
+    th,
+    td {
+        padding: 5px;
+        border: 1px solid black;
+    }
+
+    .city-input {
+        margin: 5px 0 5px 0;
     }
 </style>
