@@ -29,8 +29,8 @@
                     <thead>
                     <td></td>
                     <td>Preço</td>
-                    <td>Restante</td>
-                    <td>Desejado</td>
+                    <td>Restam</td>
+                    <td>Comprar</td>
                     <td></td>
                     </thead>
                     <tr>
@@ -86,13 +86,37 @@
         </section>
 
         <section>
-            <button style="margin-top: 20px">Reset</button>
+            <button style="margin-top: 20px" v-on:click="resetData">Reset</button>
         </section>
 
     </div>
 </template>
 
 <script>
+    let initialValue = {
+        currentMoney: 50,
+        powerPlantPrice: 1,
+
+        coalCurrentMarketPrice: 1,
+        coalCurrentMarketQuantity: 3,
+        coalDesiredUnits: 0,
+        oilCurrentMarketPrice: 1,
+        oilCurrentMarketQuantity: 3,
+        oilDesiredUnits: 0,
+        trashCurrentMarketPrice: 1,
+        trashCurrentMarketQuantity: 3,
+        trashDesiredUnits: 0,
+        uraniumCurrentMarketPrice: 1,
+        uraniumCurrentMarketQuantity: 1,
+        uraniumDesiredUnits: 0,
+
+        city1PriceInput: "",
+        city2PriceInput: "",
+        city3PriceInput: "",
+        city4PriceInput: "",
+        city5PriceInput: "",
+    }
+
     export default {
         name: 'PowerCalc',
         methods: {
@@ -139,8 +163,10 @@
                 } catch (e) {
                     return 0
                 }
+            },
+            resetData() {
+                window.location = '/'
             }
-
         },
         computed: {
             balanceAfterBuyingPowerplant() {
@@ -212,29 +238,7 @@
 
         },
         data() {
-            return {
-                currentMoney: 50,
-                powerPlantPrice: 1,
-
-                coalCurrentMarketPrice: 1,
-                coalCurrentMarketQuantity: 3,
-                coalDesiredUnits: 0,
-                oilCurrentMarketPrice: 1,
-                oilCurrentMarketQuantity: 3,
-                oilDesiredUnits: 0,
-                trashCurrentMarketPrice: 1,
-                trashCurrentMarketQuantity: 3,
-                trashDesiredUnits: 0,
-                uraniumCurrentMarketPrice: 1,
-                uraniumCurrentMarketQuantity: 1,
-                uraniumDesiredUnits: 0,
-
-                city1PriceInput: "",
-                city2PriceInput: "",
-                city3PriceInput: "",
-                city4PriceInput: "",
-                city5PriceInput: "",
-            }
+            return initialValue
         }
     }
 </script>
