@@ -15,8 +15,8 @@
         </section>
 
         <section>
-            <h1>Recursos (<span>{{balanceAfterBuyingResources}}</span> =>
-                <span>{{currentMoney - powerPlantPrice}}</span>)</h1>
+            <h1>Recursos (<span>{{balanceAfterBuyingPowerplant}}</span> =>
+                <span>{{balanceAfterBuyingResources}}</span>)</h1>
             <div>
                 <table align="center">
                     <thead>
@@ -38,38 +38,41 @@
                         <td><input v-model.number="oilCurrentMarketPrice" type="number" max="8" min="1"></td>
                         <td><input v-model.number="oilCurrentMarketQuantity" type="number" max="3" min="1"></td>
                         <td><input v-model.number="oilDesiredUnits" type="number" max="24" min="1"></td>
-                        <td><span class="totalizador">10</span></td>
+                        <td><span class="totalizador">{{costOfOil}}</span></td>
                     </tr>
                     <tr>
                         <td>Lixo</td>
                         <td><input v-model.number="trashCurrentMarketPrice" type="number" max="8" min="1"></td>
                         <td><input v-model.number="trashCurrentMarketQuantity" type="number" max="3" min="1"></td>
                         <td><input v-model.number="trashDesiredUnits" type="number" max="24" min="1"></td>
-                        <td><span class="totalizador">10</span></td>
+                        <td><span class="totalizador">{{costOfTrash}}</span></td>
                     </tr>
                     <tr>
                         <td>Urânio</td>
                         <td><input v-model.number="uraniumCurrentMarketPrice" type="number" max="8" min="1"></td>
-                        <td><input v-model.number="uraniumCurrentMarketQuantity" type="number" max="3" min="1"></td>
+                        <td><input v-model.number="uraniumCurrentMarketQuantity" type="number" max="1" min="1" disabled>
+                        </td>
                         <td><input v-model.number="uraniumDesiredUnits" type="number" max="12" min="1"></td>
-                        <td><span class="totalizador">10</span></td>
+                        <td><span class="totalizador">{{costOfUranium}}</span></td>
                     </tr>
                 </table>
             </div>
         </section>
 
         <section>
-            <h1>Rede Elétrica {{balanceAfterExpandingPowerGrid}}</h1>
+            <h1>Rede Elétrica (<span>{{balanceAfterBuyingResources}}</span> =>
+                <span>{{balanceAfterExpandingPowerGrid}}</span>)</h1>
+
             <div>Cidade #1 <input v-model="city1PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
                     class="totalizador">{{ city1Price }}</span></div>
-            <div>Cidade #2 <input type="text" placeholder="20+12" inputmode="numeric"> <span
-                    class="totalizador">32</span></div>
-            <div>Cidade #3 <input type="text" placeholder="20+12" inputmode="numeric"> <span
-                    class="totalizador">32</span></div>
-            <div>Cidade #4 <input type="text" placeholder="20+12" inputmode="numeric"> <span
-                    class="totalizador">32</span></div>
-            <div>Cidade #5 <input type="text" placeholder="20+12" inputmode="numeric"> <span
-                    class="totalizador">32</span></div>
+            <div>Cidade #2 <input v-model="city2PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
+                    class="totalizador">{{ city2Price }}</span></div>
+            <div>Cidade #3 <input v-model="city3PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
+                    class="totalizador">{{ city3Price }}</span></div>
+            <div>Cidade #4 <input v-model="city4PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
+                    class="totalizador">{{ city4Price }}</span></div>
+            <div>Cidade #5 <input v-model="city5PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
+                    class="totalizador">{{ city5Price }}</span></div>
         </section>
 
     </div>
@@ -103,26 +106,35 @@
                     firstResource = startOfTheGroup;
                 }
                 return resourceMarket.slice(firstResource, firstResource + unitsToBuy).reduce((a, b) => a + b, 0)
+            },
+            calculateExpansionCost(input) {
+                if (input === "")
+                    return 0
+                try {
+                    let price = input.toString()
+                    if (price.charAt(price.length - 1) === '+')
+                        price = price.slice(0, price.length - 1)
+
+                    return eval(price)
+                } catch (e) {
+                    return 0
+                }
             }
+
         },
         computed: {
             balanceAfterBuyingPowerplant() {
                 return this.currentMoney - this.powerPlantPrice
             },
             balanceAfterBuyingResources() {
-                return 0
-                // return this.costOfCoal
-                //     + this.calculateResourcePrice(
-                //     this.oilCurrentMarketPrice, this.oilCurrentMarketQuantity, this.oilDesiredUnits
-                // ) + this.calculateResourcePrice(
-                //     this.trashCurrentMarketPrice, this.trashCurrentMarketQuantity, this.trashDesiredUnits
-                // ) + this.calculateResourcePrice(
-                //     this.uraniumCurrentMarketPrice, this.uraniumCurrentMarketQuantity, this.uraniumDesiredUnits,
-                //     "uranium"
-                // )
+                return this.balanceAfterBuyingPowerplant - (
+                    this.costOfCoal + this.costOfOil + this.costOfTrash + this.costOfUranium
+                )
             },
             balanceAfterExpandingPowerGrid() {
-                return 0
+                return this.balanceAfterBuyingResources - (
+                    this.city1Price + this.city2Price + this.city3Price + this.city4Price + this.city5Price
+                )
             },
 
             costOfCoal() {
@@ -133,24 +145,56 @@
                 })
             },
 
-            city1Price() {
-                if (this.city1PriceInput === "")
-                    return 0
-                try {
-                    let price = this.city1PriceInput.toString()
-                    if (price.charAt(price.length - 1) === '+')
-                        price = price.slice(0, price.length - 1)
+            costOfOil() {
+                return this.calculateResourcePrice({
+                    currentPrice: this.oilCurrentMarketPrice,
+                    unitsLeftForThisPrice: this.oilCurrentMarketQuantity,
+                    unitsToBuy: this.oilDesiredUnits
+                })
+            },
 
-                    return eval(price)
-                } catch (e) {
-                    return 0
-                }
-            }
+            costOfTrash() {
+                return this.calculateResourcePrice({
+                    currentPrice: this.trashCurrentMarketPrice,
+                    unitsLeftForThisPrice: this.trashCurrentMarketQuantity,
+                    unitsToBuy: this.trashDesiredUnits
+                })
+            },
+
+            costOfUranium() {
+                return this.calculateResourcePrice({
+                    currentPrice: this.uraniumCurrentMarketPrice,
+                    unitsLeftForThisPrice: this.uraniumCurrentMarketQuantity,
+                    unitsToBuy: this.uraniumDesiredUnits,
+                    resourceType: "uranium"
+                })
+            },
+
+            city1Price() {
+                return this.calculateExpansionCost(this.city1PriceInput)
+            },
+
+            city2Price() {
+                return this.calculateExpansionCost(this.city2PriceInput)
+            },
+
+            city3Price() {
+                return this.calculateExpansionCost(this.city3PriceInput)
+            },
+
+            city4Price() {
+                return this.calculateExpansionCost(this.city4PriceInput)
+            },
+
+            city5Price() {
+                return this.calculateExpansionCost(this.city5PriceInput)
+            },
+
         },
         data() {
             return {
-                currentMoney: 0,
-                powerPlantPrice: 0,
+                currentMoney: 50,
+                powerPlantPrice: 1,
 
                 coalCurrentMarketPrice: 1,
                 coalCurrentMarketQuantity: 3,
@@ -162,14 +206,14 @@
                 trashCurrentMarketQuantity: 3,
                 trashDesiredUnits: 0,
                 uraniumCurrentMarketPrice: 1,
-                uraniumCurrentMarketQuantity: 3,
+                uraniumCurrentMarketQuantity: 1,
                 uraniumDesiredUnits: 0,
 
-                city1PriceInput: 0,
-                city2PriceInput: 0,
-                city3PriceInput: 0,
-                city4PriceInput: 0,
-                city5PriceInput: 0,
+                city1PriceInput: "",
+                city2PriceInput: "",
+                city3PriceInput: "",
+                city4PriceInput: "",
+                city5PriceInput: "",
             }
         }
     }
