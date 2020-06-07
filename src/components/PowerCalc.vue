@@ -106,6 +106,10 @@
         </section>
 
         <section>
+            <h1>Burocracia</h1>
+            <p>Alimentei <input v-model="suppliedCities" type="number" max="20" min="0" inputmode="numeric" style="width: 30px"> cidades, ganhando <b>+${{moneyForSupplyingCities}}</b></p>
+            <p>Próxima rodada inicio com <b>${{expectedStartingMoneyForTheNextRound}}</b>.</p>
+            <p>Ou sobrescreva com <input v-model="nextRoundMoneyOverride" style="width: 30px">.</p>
             <button style="margin-top: 5px" v-on:click="newRound">Nova Rodada</button>
         </section>
 
@@ -147,6 +151,9 @@
         city3PriceInput: "",
         city4PriceInput: "",
         city5PriceInput: "",
+
+        suppliedCities: null,
+        nextRoundMoneyOverride: null,
     }
 
     export default {
@@ -201,10 +208,10 @@
                 }
             },
             newRound() {
-                let nextRoungInitialValues = {...initialValue, 'currentMoney': this.balanceAfterExpandingPowerGrid}
-                delete nextRoungInitialValues.resourceBuyStepStyle
+                let nextRoundInitialValues = {...initialValue, 'currentMoney': this.nextRoundMoneyOverride || this.expectedStartingMoneyForTheNextRound}
+                delete nextRoundInitialValues.resourceBuyStepStyle
 
-                Object.entries(nextRoungInitialValues).forEach(([key, value]) => {
+                Object.entries(nextRoundInitialValues).forEach(([key, value]) => {
                     this[key] = value
                 });
 
@@ -294,6 +301,17 @@
             city5Price() {
                 return this.calculateExpansionCost(this.city5PriceInput)
             },
+
+            moneyForSupplyingCities(){
+                return {
+                    0: 10, 1: 22, 2: 33, 3: 44, 4: 54, 5: 64, 6: 73, 7: 82, 8: 90, 9: 98, 10: 105,
+                    11: 112, 12: 118, 13: 124, 14: 129, 15: 134, 16: 138, 17: 142, 18: 145, 19: 148, 20: 150
+                }[this.suppliedCities || 0]
+            },
+
+            expectedStartingMoneyForTheNextRound(){
+                return this.balanceAfterExpandingPowerGrid + this.moneyForSupplyingCities
+            }
 
         },
         data() {
