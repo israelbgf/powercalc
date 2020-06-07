@@ -2,6 +2,7 @@
     <div>
         <section>
             <h1>Seu Dinheiro</h1>
+            <div style="margin-top: -20px; margin-bottom: 20px; font-size: 12px">(por rodada: {{initialMoneyPerRoundHistory.join(', ')}})</div>
             <div>
                 <input v-model.number="currentMoney" type="text" placeholder="20+12" inputmode="numeric">
             </div>
@@ -19,19 +20,35 @@
         </section>
 
         <section>
-            <h1>Recursos:<span>{{balanceAfterBuyingPowerplant}}</span> =>
+            <h1>Recursos: <span>{{balanceAfterBuyingPowerplant}}</span> =>
                 <span v-bind:class="{ green: balanceAfterBuyingResources >= 0, red: balanceAfterBuyingResources < 0 }">
                     {{balanceAfterBuyingResources}}
                 </span>
             </h1>
-            <div>
+            <div v-if="resourceBuyStepStyle === 'simplified'" >
                 <table class="resources-table" align="center">
                     <thead>
-                    <td></td>
-                    <td>Preço</td>
-                    <td>Restam</td>
-                    <td>Comprar</td>
-                    <td></td>
+                        <td>Carvão</td>
+                        <td>Óleo</td>
+                        <td>Lixo</td>
+                        <td>Urânio</td>
+                    </thead>
+                    <tr>
+                        <td><input v-model.number="coalExpectedPrice" type="number" max="99" min="0"></td>
+                        <td><input v-model.number="oilExpectedPrice" type="number" max="99" min="0"></td>
+                        <td><input v-model.number="trashExpectedPrice" type="number" max="99" min="0"></td>
+                        <td><input v-model.number="uraniumExpectedPrice" type="number" max="99" min="0"></td>
+                    </tr>
+                </table>
+            </div>
+            <div v-if="resourceBuyStepStyle === 'advanced'" style="display: inline-flex">
+                <table class="resources-table" align="center">
+                    <thead>
+                        <td></td>
+                        <td>Preço</td>
+                        <td>Restam</td>
+                        <td>Comprar</td>
+                        <td></td>
                     </thead>
                     <tr>
                         <td>Carvão</td>
@@ -64,6 +81,9 @@
                     </tr>
                 </table>
             </div>
+            <div>
+                <button @click="changeResourceBuyStepStyle" style="margin-top: 10px">{{changeResourceBuyStepStyleLabel}}</button>
+            </div>
         </section>
 
         <section>
@@ -86,16 +106,28 @@
         </section>
 
         <section>
-            <button style="margin-top: 20px" v-on:click="resetData">Reset</button>
+            <button style="margin-top: 5px" v-on:click="newRound">Nova Rodada</button>
         </section>
 
     </div>
 </template>
 
 <script>
+    window.addEventListener('beforeunload', function (e) {
+        e.preventDefault();
+        e.returnValue = '';
+    });
+
     let initialValue = {
         currentMoney: 50,
-        powerPlantPrice: 1,
+        powerPlantPrice: 0,
+
+        resourceBuyStepStyle: "simplified",
+
+        coalExpectedPrice: 0,
+        oilExpectedPrice: 0,
+        trashExpectedPrice: 0,
+        uraniumExpectedPrice: 0,
 
         coalCurrentMarketPrice: 1,
         coalCurrentMarketQuantity: 3,
@@ -120,6 +152,10 @@
     export default {
         name: 'PowerCalc',
         methods: {
+            changeResourceBuyStepStyle(){
+                this.resourceBuyStepStyle = this.resourceBuyStepStyle === 'simplified' ? 'advanced' : 'simplified'
+            },
+
             calculateResourcePrice({currentPrice, unitsLeftForThisPrice, unitsToBuy, resourceType = "common"}) {
                 if (currentPrice <= 0 || unitsLeftForThisPrice <= 0 || unitsToBuy <= 0) {
                     return 0
@@ -164,11 +200,22 @@
                     return 0
                 }
             },
-            resetData() {
-                window.location = '/'
+            newRound() {
+                let nextRoungInitialValues = {...initialValue, 'currentMoney': this.balanceAfterExpandingPowerGrid}
+                delete nextRoungInitialValues.resourceBuyStepStyle
+
+                Object.entries(nextRoungInitialValues).forEach(([key, value]) => {
+                    this[key] = value
+                });
+
+                this.initialMoneyPerRoundHistory.push(this.currentMoney)
             }
         },
         computed: {
+            changeResourceBuyStepStyleLabel(){
+                return this.resourceBuyStepStyle === 'simplified' ? 'Avançado' : 'Simplificado'
+            },
+
             balanceAfterBuyingPowerplant() {
                 return this.currentMoney - this.powerPlantPrice
             },
@@ -184,6 +231,9 @@
             },
 
             costOfCoal() {
+                if (this.resourceBuyStepStyle === 'simplified')
+                    return this.coalExpectedPrice
+
                 return this.calculateResourcePrice({
                     currentPrice: this.coalCurrentMarketPrice,
                     unitsLeftForThisPrice: this.coalCurrentMarketQuantity,
@@ -192,6 +242,9 @@
             },
 
             costOfOil() {
+                if (this.resourceBuyStepStyle === 'simplified')
+                    return this.oilExpectedPrice
+
                 return this.calculateResourcePrice({
                     currentPrice: this.oilCurrentMarketPrice,
                     unitsLeftForThisPrice: this.oilCurrentMarketQuantity,
@@ -200,6 +253,9 @@
             },
 
             costOfTrash() {
+                if (this.resourceBuyStepStyle === 'simplified')
+                    return this.trashExpectedPrice
+
                 return this.calculateResourcePrice({
                     currentPrice: this.trashCurrentMarketPrice,
                     unitsLeftForThisPrice: this.trashCurrentMarketQuantity,
@@ -208,6 +264,9 @@
             },
 
             costOfUranium() {
+                if (this.resourceBuyStepStyle === 'simplified')
+                    return this.uraniumExpectedPrice
+
                 return this.calculateResourcePrice({
                     currentPrice: this.uraniumCurrentMarketPrice,
                     unitsLeftForThisPrice: this.uraniumCurrentMarketQuantity,
@@ -238,7 +297,7 @@
 
         },
         data() {
-            return initialValue
+            return {...initialValue, 'initialMoneyPerRoundHistory': [50]}
         }
     }
 </script>
@@ -295,4 +354,5 @@
     .city-input {
         margin: 5px 0 5px 0;
     }
+
 </style>
