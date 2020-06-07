@@ -74,7 +74,7 @@
                     </tr>
                     <tr>
                         <td>{{$t('uranium')}}</td>
-                        <td><input v-model.number="uraniumCurrentMarketPrice" type="number" max="8" min="1"></td>
+                        <td><input v-model.number="uraniumCurrentMarketPrice" type="number" max="16" min="1"></td>
                         <td><input v-model.number="uraniumCurrentMarketQuantity" type="number" max="1" min="1" disabled>
                         </td>
                         <td><input v-model.number="uraniumDesiredUnits" type="number" max="12" min="1"></td>
