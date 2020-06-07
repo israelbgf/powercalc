@@ -217,6 +217,7 @@
                 });
 
                 this.initialMoneyPerRoundHistory.push(this.currentMoney)
+                window.scrollTo(0, 0);
             },
 
             changeLocale(locale){
