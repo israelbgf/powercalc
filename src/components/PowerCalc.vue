@@ -46,9 +46,9 @@
                 <table class="resources-table" align="center">
                     <thead>
                         <td></td>
-                        <td>Preço</td>
-                        <td>Restam</td>
-                        <td>Comprar</td>
+                        <td>{{$t('price')}}</td>
+                        <td>{{$t('left')}}</td>
+                        <td>{{$t('want')}}</td>
                         <td></td>
                     </thead>
                     <tr>
