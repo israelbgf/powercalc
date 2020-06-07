@@ -82,7 +82,7 @@
                 </table>
             </div>
             <div>
-                <button @click="changeResourceBuyStepStyle" style="margin-top: 10px">{{changeResourceBuyStepStyleLabel}}</button>
+                <button @click="changeResourceBuyStepStyle" style="margin-top: 20px">{{changeResourceBuyStepStyleLabel}}</button>
             </div>
         </section>
 
@@ -107,10 +107,10 @@
 
         <section>
             <h1>Burocracia</h1>
-            <p>Alimentei <input v-model="suppliedCities" type="number" max="20" min="0" inputmode="numeric" style="width: 30px"> cidades, ganhando <b>+${{moneyForSupplyingCities}}</b></p>
-            <p>Próxima rodada inicio com <b>${{expectedStartingMoneyForTheNextRound}}</b>.</p>
-            <p>Ou sobrescreva com <input v-model="nextRoundMoneyOverride" style="width: 30px">.</p>
-            <button style="margin-top: 5px" v-on:click="newRound">Nova Rodada</button>
+            <p>Alimentei <input v-model="suppliedCities" type="number" max="20" min="0" inputmode="numeric" style="width: 30px"> cidades, ganhando <b style="color: green">+${{moneyForSupplyingCities}}</b>.</p>
+            <p>Próxima rodada devo iniciar com <b>${{expectedStartingMoneyForTheNextRound}}</b>.</p>
+            <p>Ou ignoro e inicio com <input v-model="nextRoundMoneyOverride" style="width: 30px">.</p>
+            <button v-on:click="newRound">Nova Rodada</button>
         </section>
 
     </div>
