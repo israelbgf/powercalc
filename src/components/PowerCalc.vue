@@ -1,15 +1,15 @@
 <template>
     <div>
         <section>
-            <h1>Seu Dinheiro</h1>
-            <div style="margin-top: -20px; margin-bottom: 20px; font-size: 12px">(por rodada: {{initialMoneyPerRoundHistory.join(', ')}})</div>
+            <h1>{{ $t('current_money') }}</h1>
+            <div style="margin-top: -20px; margin-bottom: 20px; font-size: 12px">({{$t('current_money_per_round')}}: {{initialMoneyPerRoundHistory.join(', ')}})</div>
             <div>
                 <input v-model.number="currentMoney" type="text" placeholder="20+12" inputmode="numeric">
             </div>
         </section>
 
         <section>
-            <h1>Leilão: <span>{{currentMoney}}</span> =>
+            <h1>{{$t('auction')}}: <span>{{currentMoney}}</span> =>
                 <span v-bind:class="{ green: balanceAfterBuyingPowerplant >= 0, red: balanceAfterBuyingPowerplant < 0 }">
                     {{balanceAfterBuyingPowerplant}}
                 </span>
@@ -20,7 +20,7 @@
         </section>
 
         <section>
-            <h1>Recursos: <span>{{balanceAfterBuyingPowerplant}}</span> =>
+            <h1>{{$t('resources')}}: <span>{{balanceAfterBuyingPowerplant}}</span> =>
                 <span v-bind:class="{ green: balanceAfterBuyingResources >= 0, red: balanceAfterBuyingResources < 0 }">
                     {{balanceAfterBuyingResources}}
                 </span>
@@ -28,10 +28,10 @@
             <div v-if="resourceBuyStepStyle === 'simplified'" >
                 <table class="resources-table" align="center">
                     <thead>
-                        <td>Carvão</td>
-                        <td>Óleo</td>
-                        <td>Lixo</td>
-                        <td>Urânio</td>
+                        <td>{{$t('coal')}}</td>
+                        <td>{{$t('oil')}}</td>
+                        <td>{{$t('garbage')}}</td>
+                        <td>{{$t('uranium')}}</td>
                     </thead>
                     <tr>
                         <td><input v-model.number="coalExpectedPrice" type="number" max="99" min="0"></td>
@@ -51,28 +51,28 @@
                         <td></td>
                     </thead>
                     <tr>
-                        <td>Carvão</td>
+                        <td>{{$t('coal')}}</td>
                         <td><input v-model.number="coalCurrentMarketPrice" type="number" max="8" min="1"></td>
                         <td><input v-model.number="coalCurrentMarketQuantity" type="number" max="3" min="1"></td>
                         <td><input v-model.number="coalDesiredUnits" type="number" max="24" min="1"></td>
                         <td><span class="totalizador">{{costOfCoal}}</span></td>
                     </tr>
                     <tr>
-                        <td>Óleo</td>
+                        <td>{{$t('oil')}}</td>
                         <td><input v-model.number="oilCurrentMarketPrice" type="number" max="8" min="1"></td>
                         <td><input v-model.number="oilCurrentMarketQuantity" type="number" max="3" min="1"></td>
                         <td><input v-model.number="oilDesiredUnits" type="number" max="24" min="1"></td>
                         <td><span class="totalizador">{{costOfOil}}</span></td>
                     </tr>
                     <tr>
-                        <td>Lixo</td>
+                        <td>{{$t('garbage')}}</td>
                         <td><input v-model.number="trashCurrentMarketPrice" type="number" max="8" min="1"></td>
                         <td><input v-model.number="trashCurrentMarketQuantity" type="number" max="3" min="1"></td>
                         <td><input v-model.number="trashDesiredUnits" type="number" max="24" min="1"></td>
                         <td><span class="totalizador">{{costOfTrash}}</span></td>
                     </tr>
                     <tr>
-                        <td>Urânio</td>
+                        <td>{{$t('uranium')}}</td>
                         <td><input v-model.number="uraniumCurrentMarketPrice" type="number" max="8" min="1"></td>
                         <td><input v-model.number="uraniumCurrentMarketQuantity" type="number" max="1" min="1" disabled>
                         </td>
@@ -87,30 +87,30 @@
         </section>
 
         <section>
-            <h1>Rede Elétrica: <span>{{balanceAfterBuyingResources}}</span> =>
+            <h1>{{$t('power_grid')}}: <span>{{balanceAfterBuyingResources}}</span> =>
                 <span v-bind:class="{ green: balanceAfterExpandingPowerGrid >= 0, red: balanceAfterExpandingPowerGrid < 0 }">
                     {{balanceAfterExpandingPowerGrid}}
                 </span>
             </h1>
 
-            <div class="city-input">Cidade #1 <input v-model="city1PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
+            <div class="city-input">{{$t('city')}} #1 <input v-model="city1PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
                     class="totalizador">{{ city1Price }}</span></div>
-            <div class="city-input">Cidade #2 <input v-model="city2PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
+            <div class="city-input">{{$t('city')}} #2 <input v-model="city2PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
                     class="totalizador">{{ city2Price }}</span></div>
-            <div class="city-input">Cidade #3 <input v-model="city3PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
+            <div class="city-input">{{$t('city')}} #3 <input v-model="city3PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
                     class="totalizador">{{ city3Price }}</span></div>
-            <div class="city-input">Cidade #4 <input v-model="city4PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
+            <div class="city-input">{{$t('city')}} #4 <input v-model="city4PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
                     class="totalizador">{{ city4Price }}</span></div>
-            <div class="city-input">Cidade #5 <input v-model="city5PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
+            <div class="city-input">{{$t('city')}} #5 <input v-model="city5PriceInput" type="text" placeholder="20+12" inputmode="numeric"> <span
                     class="totalizador">{{ city5Price }}</span></div>
         </section>
 
         <section>
-            <h1>Burocracia</h1>
-            <p>Alimentei <input v-model="suppliedCities" type="number" max="20" min="0" inputmode="numeric" style="width: 30px"> cidades, ganhando <b style="color: green">+${{moneyForSupplyingCities}}</b>.</p>
-            <p>Próxima rodada devo iniciar com <b>${{expectedStartingMoneyForTheNextRound}}</b>.</p>
-            <p>Ou ignoro e inicio com <input v-model="nextRoundMoneyOverride" style="width: 30px">.</p>
-            <button v-on:click="newRound">Nova Rodada</button>
+            <h1>{{$t('bureaucracy.title')}}</h1>
+            <p>{{$t('bureaucracy.i_fed')}} <input v-model="suppliedCities" type="number" max="20" min="0" inputmode="numeric" style="width: 30px"> {{$t('bureaucracy.winning')}} <b style="color: green">+${{moneyForSupplyingCities}}</b>.</p>
+            <p>{{$t('bureaucracy.next_round')}} <b>${{expectedStartingMoneyForTheNextRound}}</b>.</p>
+            <p>{{$t('bureaucracy.override')}} <input v-model="nextRoundMoneyOverride" style="width: 30px">.</p>
+            <button v-on:click="newRound">{{$t('button.next_round')}}</button>
         </section>
 
     </div>
@@ -220,7 +220,7 @@
         },
         computed: {
             changeResourceBuyStepStyleLabel(){
-                return this.resourceBuyStepStyle === 'simplified' ? 'Avançado' : 'Simplificado'
+                return this.resourceBuyStepStyle === 'simplified' ? this.$t('button.advanced') : this.$t('button.simplified')
             },
 
             balanceAfterBuyingPowerplant() {

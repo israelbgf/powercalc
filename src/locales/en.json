@@ -1,0 +1,20 @@
+{
+  "current_money": "Current Money",
+  "current_money_per_round": "per round",
+  "auction": "Auction",
+  "resources": "Resources",
+  "coal": "Coal",
+  "oil": "Oil",
+  "garbage": "Garbage",
+  "uranium": "Uranium",
+  "power_grid": "Power Grid",
+  "city": "City",
+  "bureaucracy.title": "Bureaucracy",
+  "bureaucracy.i_fed": "I fed",
+  "bureaucracy.winning": "cities, winning",
+  "bureaucracy.next_round": "Next round I'll start with",
+  "bureaucracy.override": "Or I ignore it and start with",
+  "button.next_round": "New Round",
+  "button.advanced": "Advanced",
+  "button.simplified": "Simplified"
+}

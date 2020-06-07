@@ -1,0 +1,20 @@
+{
+  "current_money": "Seu Dinheiro",
+  "current_money_per_round": "por rodada",
+  "auction": "Leilão",
+  "resources": "Recursos",
+  "coal": "Carvão",
+  "oil": "Óleo",
+  "garbage": "Lixo",
+  "uranium": "Urânio",
+  "power_grid": "Rede Elétrica",
+  "city": "Cidade",
+  "bureaucracy.title": "Burocracia",
+  "bureaucracy.ifed": "Alimentei",
+  "bureaucracy.winning": "cidades, ganhando",
+  "bureaucracy.nextround": "Próxima rodada devo iniciar com",
+  "bureaucracy.override": "Ou ignoro e inicio com",
+  "button.nextround": "Próxima Rodada",
+  "button.advanced": "Avançado",
+  "button.simplified": "Simplificado"
+}
