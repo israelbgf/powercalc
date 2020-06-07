@@ -1,5 +1,6 @@
 <template>
     <div>
+        <div><a @click="changeLocale('en')" href="#">English</a> / <a @click="changeLocale('pt_BR')" href="#">Português</a></div>
         <section>
             <h1>{{ $t('current_money') }}</h1>
             <div style="margin-top: -20px; margin-bottom: 20px; font-size: 12px">({{$t('current_money_per_round')}}: {{initialMoneyPerRoundHistory.join(', ')}})</div>
@@ -216,6 +217,10 @@
                 });
 
                 this.initialMoneyPerRoundHistory.push(this.currentMoney)
+            },
+
+            changeLocale(locale){
+                this.$i18n.locale = locale
             }
         },
         computed: {

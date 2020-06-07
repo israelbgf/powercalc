@@ -10,11 +10,11 @@
   "power_grid": "Rede Elétrica",
   "city": "Cidade",
   "bureaucracy.title": "Burocracia",
-  "bureaucracy.ifed": "Alimentei",
+  "bureaucracy.i_fed": "Alimentei",
   "bureaucracy.winning": "cidades, ganhando",
-  "bureaucracy.nextround": "Próxima rodada devo iniciar com",
+  "bureaucracy.next_round": "Próxima rodada devo iniciar com",
   "bureaucracy.override": "Ou ignoro e inicio com",
-  "button.nextround": "Próxima Rodada",
+  "button.next_round": "Próxima Rodada",
   "button.advanced": "Avançado",
   "button.simplified": "Simplificado"
 }
